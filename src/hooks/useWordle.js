@@ -9,7 +9,29 @@ const useWordle = (solution) => {
     const [isCorrect, setIsCorrect] = useState(false)
 
     const formatGuess = () => {
-        console.log("formatting the guess - ", currentGuess)
+        let solutionArray = [...solution]
+        let formattedGuess = [...currentGuess].map((l) => {
+            return {key: l, color: "grey"}
+        })
+
+        //green letters
+        formattedGuess.forEach((l, i) => {
+            if (solutionArray[i] === l.key) {
+                formattedGuess[i].color = "green"
+                solutionArray[i] = null;
+            }
+        })
+
+        //yellow letters
+        formattedGuess.forEach((l, i) => {
+            if (solutionArray.includes(l.key) && l.color !== "green") {
+                formattedGuess[i].color = "yellow"
+                solutionArray[solutionArray.indexOf(l.key)] = null
+
+            }
+        })
+
+        return formattedGuess
     }
 
     const addNewGuess = () => {
@@ -34,7 +56,8 @@ const useWordle = (solution) => {
                 return
             }
 
-            formatGuess()
+            const formatted = formatGuess()
+            console.log(formatted)
         }
 
         if (key === "Backspace") {
